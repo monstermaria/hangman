@@ -4,7 +4,7 @@
     <string name="start_game">Start  new game</string>
     <string name="guess_a_letter">Guess a letter</string>
     <string name="guess_the_word">Guess the word</string>
-    <string name="instructions">Enter a letter at a time, or guess the whole word.</string>
+    <string name="instructions">Enter a letter at a time, or guess the whole word. The word has %1$d letters. Good luck!</string>
     <string name="too_many_letters">One letter at a time, please!</string>
     <string name="not_a_letter">Only letters, please!</string>
     <string name="letter_already_used">You have already used that letter</string>
@@ -12,4 +12,10 @@
     <string name="letter_not_in_word">You are wrong!</string>
     <string name="status_button">Show status</string>
     <string name="continue_game">Continue saved game</string>
+    <string name="make_a_guess">Make a guess</string>
+    <string name="wrong_number_of_letters">The word you guessed contain the wrong number of letters.</string>
+    <string name="status">You have used %1$d of 10 tries.</string>
+    <string name="status_won">Congratulations, you won! You used %1$d of 10 tries.</string>
+    <string name="status_lost">Sorry, you lost! Better luck next time!</string>
+    <string name="used_letters">You have used these letters: %1$s</string>
 </resources>

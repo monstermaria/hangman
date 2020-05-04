@@ -3,6 +3,7 @@ package com.example.hangman;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,9 +16,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.d("lifecycle", "onCreate " + this);
-
-        // hide continue game if there is no saved game
-        findViewById(R.id.continueGame).setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -25,6 +23,17 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         Log.d("lifecycle", "onStart " + this);
+
+        // hide continue game if there is no saved game
+        SharedPreferences prefs = getSharedPreferences("Hangman", MODE_PRIVATE);
+        if (prefs == null) {
+            findViewById(R.id.continueGame).setVisibility(View.INVISIBLE);
+        } else {
+            String wordToGuess = prefs.getString("wordToGuess", null);
+            if (wordToGuess == null) {
+                findViewById(R.id.continueGame).setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     @Override
@@ -64,10 +73,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void startGame(View view) {
         Intent intent = new Intent(this, PlayGameActivity.class);
+        intent.putExtra("game", "new");
         startActivity(intent);
     }
 
     public void continueGame(View view) {
-        Log.d("continue", "here we will load saved game");
+        Intent intent = new Intent(this, PlayGameActivity.class);
+        intent.putExtra("game", "saved");
+        startActivity(intent);
     }
 }

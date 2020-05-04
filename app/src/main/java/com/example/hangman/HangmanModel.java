@@ -2,44 +2,58 @@ package com.example.hangman;
 
 
 import android.content.SharedPreferences;
-import android.os.Bundle;
+import android.content.res.Resources;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.Random;
 
 class HangmanModel {
 
-    String[] words = { "rock", "scissors", "paper" };
-    Random random = new Random();
-
     String wordToGuess;
     char[] showWord;
-    int numberOfTries = 10, hangRound = 0;
-    boolean won = false, lost = false, finished = false;
+    int hangRound = 0;
+    boolean won = false;
+    boolean lost = false;
+    boolean finished = false;
 
-    ArrayList<Character> usedLetters = new ArrayList<Character>(30);
+    ArrayList<Character> usedLetters = new ArrayList<>(30);
 
-    HangmanModel(SharedPreferences prefs) {
-        if (prefs != null) {
-            Log.d("lifecycle", prefs.toString());
+    HangmanModel(SharedPreferences prefs, String word) {
+//        Random random = new Random();
+////        String[] words = {"kattunge", "javaprogrammering", "lokaltrafik", "blomsteräng"};
+//        // trying to load words from resources
+//        String[] words = getStringArray(R.array.words);
+//        Resources res = getResources();
+//        String[] planets = res.getStringArray(R.array.words);
+
+        if (prefs != null && prefs.getString("wordToGuess", null) != null) {
             // restore game
-
             String savedInfo =  prefs.getString("wordToGuess", null);
-            if (savedInfo == null) {
-                // start new game
-                wordToGuess = words[random.nextInt(words.length)];
-                setupGame(wordToGuess);
-            } else {
-                Log.d("savedInfo", savedInfo);
-                wordToGuess = savedInfo;
-                savedInfo = prefs.getString("showWord", null);
-                showWord = savedInfo.toCharArray();
-                hangRound = prefs.getInt("hangRound", 0);
-                savedInfo = prefs.getString("usedLetters", null);
-                usedLetters = new ArrayList<Character>(30);
-                for (int i = 0; i < savedInfo.length(); i++) {
-                    usedLetters.add(savedInfo.charAt(i));
-                }
+            assert savedInfo != null;
+            wordToGuess = savedInfo;
+            Log.d("lifecycle", "wordToGuess: " + wordToGuess);
+
+            savedInfo = prefs.getString("showWord", null);
+            Log.d("lifecycle", "showWord: " + savedInfo);
+            assert savedInfo != null;
+            showWord = savedInfo.toCharArray();
+
+            hangRound = prefs.getInt("hangRound", 0);
+
+            savedInfo = prefs.getString("usedLetters", null);
+            Log.d("lifecycle", "usedLetters: " + savedInfo);
+            assert savedInfo != null;
+            usedLetters = new ArrayList<>(30);
+            for (int i = 0; i < savedInfo.length(); i++) {
+                usedLetters.add(savedInfo.charAt(i));
+            }
+        } else {
+            // start new game
+            wordToGuess = word;
+
+            showWord = wordToGuess.toCharArray();
+            for (int i = 0; i < wordToGuess.length(); i++) {
+                showWord[i] = '_';
             }
         }
     }
@@ -49,59 +63,23 @@ class HangmanModel {
             won = true;
             finished = true;
         }
-        if (hangRound == numberOfTries) {
+        if (hangRound == 10) {
             lost = true;
             finished = true;
         }
     }
 
-
-    public void oldMain() {
-
-        boolean continueGame = true;
-        while (continueGame) {
-
-            String command = "getCommand()";
-
-            switch (command) {
-                case "s":
-                    int triesLeft = numberOfTries - hangRound;
-                    System.out.print("Så här ser det ut just nu: ");
-                    System.out.println(showWord);
-                    printHangman();
-                    System.out.println("Du har förbrukat " + hangRound + " försök.");
-                    System.out.println("Du har " + triesLeft + " försök kvar.");
-                    System.out.print("Du har använt dessa bokstäver: ");
-                    System.out.println(usedLetters);
-                    break;
-            }
-
-            if (numberOfTries - hangRound <= 0) {
-
-                System.out.println("Tyvärr så har du nu använt alla dina gissningar. Bättre lycka nästa gång!");
-                continueGame = false;
-            }
+    int handleInput(CharSequence input) {
+        if (input.length() == 1) {
+            return handleLetterInput(input);
+        } else if (input.length() == wordToGuess.length()) {
+            return handleWordInput(input);
+        } else {
+            return R.string.wrong_number_of_letters;
         }
     }
 
-    private void setupGame(String wordToGuess) {
-
-        showWord = wordToGuess.toCharArray();
-
-        for (int i = 0; i < wordToGuess.length(); i++) {
-
-            showWord[i] = '_';
-        }
-
-//        System.out.println("Välkommen till Hangman!");
-//        System.out.println("Ordet du ska gissa är " + showWord.length + " bokstäver långt.");
-//        System.out.println("Du har " + numberOfTries + " försök på dig. Lycka till!");
-    }
-
-    int handleLetterInput(CharSequence input) {
-        if (input.length() > 1) {
-           return R.string.too_many_letters;
-        }
+    private int handleLetterInput(CharSequence input) {
 
         char letter = input.charAt(0);
         if (Character.isLetter(letter)) {
@@ -128,7 +106,7 @@ class HangmanModel {
         }
     }
 
-    int handleWordInput(CharSequence input) {
+    private int handleWordInput(CharSequence input) {
         String word = input.toString().toLowerCase();
         if (word.equals(wordToGuess)) {
             for (int i = 0; i < showWord.length; i++) {
@@ -140,39 +118,5 @@ class HangmanModel {
             hangRound++;
             return R.string.letter_not_in_word;
         }
-    }
-
-    void win() {
-
-        System.out.println("Du gissade rätt! Grattis till vinsten!");
-        System.out.println("Du gissade fel " + hangRound + " gånger.");
-    }
-
-    void fail() {
-
-        hangRound++;
-        printHangman();
-        System.out.println("Tyvärr, det var fel.");
-        System.out.println("Du har använt " + hangRound + " försök.");
-    }
-
-    void printHangman() {
-
-        String[] hangman = {
-                "\n\n\n\n\n\n",
-                "\n\n\n\n\n\n/|\\",
-                "\n |\n |\n |\n |\n |\n/|\\",
-                " ____\n |\n |\n |\n |\n |\n/|\\",
-                " ____\n |  |\n |\n |\n |\n |\n/|\\",
-                " ____\n |  |\n |  o\n |\n |\n |\n/|\\",
-                " ____\n |  |\n |  o\n |  |\n |\n |\n/|\\",
-                " ____\n |  |\n |  o\n | /|\n |\n |\n/|\\",
-                " ____\n |  |\n |  o\n | /|\\\n |\n |\n/|\\",
-                " ____\n |  |\n |  o\n | /|\\\n | /\n |\n/|\\",
-                " ____\n |  |\n |  o\n | /|\\\n | / \\\n |\n/|\\"
-        };
-
-        System.out.println(hangman[hangRound]);
-
     }
 }
