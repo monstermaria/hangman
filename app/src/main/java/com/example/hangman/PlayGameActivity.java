@@ -46,6 +46,7 @@ public class PlayGameActivity extends AppCompatActivity {
         Random random = new Random();
         String word = words[random.nextInt(words.length)];
 
+        // TODO: handle all entries better
         if (gameSetup != null && gameSetup.equals("new")) {
             // start new game
             game = new HangmanModel(word);
@@ -59,8 +60,6 @@ public class PlayGameActivity extends AppCompatActivity {
                 game = new HangmanModel(word);
             }
         }
-
-        game.updateGameState();
     }
 
     boolean loadGame(SharedPreferences prefs) {
@@ -92,25 +91,18 @@ public class PlayGameActivity extends AppCompatActivity {
     void initializeGUI() {
         instructionsView = findViewById(R.id.instructionsView);
         instructionsView.setText(getString(R.string.instructions, game.getWordToGuess().length()));
+
         triesView = findViewById(R.id.triesView);
         timerView = findViewById(R.id.timerView);
+
         infoView = findViewById(R.id.infoView);
         infoView.setText("");
+
         showWord = findViewById(R.id.showWordView);
+
         makeAGuess = findViewById(R.id.guessView);
-        newGameButton = findViewById(R.id.startNewGameButton);
-        newGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("start", "start new game");
-                setupGame(("new"));
-                initializeGUI();
-                setupTimer();
-            }
-        });
-
-        setupTimer();
-
+        // show input field
+        makeAGuess.setVisibility(View.VISIBLE);
         // set callback for when a guess has been made
         makeAGuess.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -122,12 +114,25 @@ public class PlayGameActivity extends AppCompatActivity {
                     v.setText("");
                     handled = true;
                 }
-
                 return handled;
             }
         });
 
-        checkStatusAndUpdateUI();
+        newGameButton = findViewById(R.id.startNewGameButton);
+        // hide button to start new game
+        newGameButton.setVisibility(View.INVISIBLE);
+        newGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("start", "start new game");
+                setupGame(("new"));
+                initializeGUI();
+                setupTimer();
+                timer.start();
+                updateGUI();
+            }
+        });
+
     }
 
     void handleInput(CharSequence input) {
@@ -135,58 +140,60 @@ public class PlayGameActivity extends AppCompatActivity {
         if (input.length() > 0) {
             int message = game.handleInput(input);
             infoView.setText(message);
-//            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            checkStatusAndUpdateUI();
+            updateGUI();
         }
     }
 
-    void checkStatusAndUpdateUI() {
-
-        game.updateGameState();
-
+    void updateGUI() {
+        
         triesView.setText(getString(R.string.status, game.getHangRound()));
         showWord.setText(game.getShowWord());
         // update timer view
         timerView.setText(getString(R.string.timer_text, game.getSecondsLeft()));
 
         if (game.getGameState() != game.ACTIVE) {
-            
-            if (game.getGameState() == game.WON) {
-                infoView.setText(getString(R.string.status_won, game.getHangRound()));
-            }
-            
-            if (game.getGameState() == game.LOST) {
-                infoView.setText(getString(R.string.status_lost));
-            }
+            endGame();
+        }
+    }
 
-            // stop the timer
-            timer.cancel();
+    void endGame() {
+        if (game.getGameState() == game.WON) {
+            infoView.setText(getString(R.string.status_won, game.getHangRound()));
+        }
 
-            // hide input field so the player can't continue to make guesses
-            makeAGuess.setVisibility(View.INVISIBLE);
+        if (game.getGameState() == game.LOST) {
+            infoView.setText(getString(R.string.status_lost));
+        }
 
-            // show button to start new game
-            newGameButton.setVisibility(View.VISIBLE);
+        // stop the timer
+        timer.cancel();
 
-            // remove saved game
-            SharedPreferences.Editor editor = getSharedPreferences(
-                    "Hangman",
-                    MODE_PRIVATE
-            ).edit();
+        // hide input field so the player can't continue to make guesses
+        makeAGuess.setVisibility(View.INVISIBLE);
+
+        // show button to start new game
+        newGameButton.setVisibility(View.VISIBLE);
+
+        // TODO: hide softkey
+
+        // remove saved game
+        deleteSavedGame();
+    }
+
+    void deleteSavedGame() {
+        SharedPreferences prefs = getSharedPreferences("Hangman", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        String word = prefs.getString("wordToGuess", null);
+
+        Log.d("save", "before deleting game: " + word);
 
 //            editor.clear();
-            editor.putString("wordToGuess", null);
-            editor.apply();
+        editor.putString("wordToGuess", null);
+        editor.apply();
 //            editor.commit();
 
-            Log.d("save", "deleting game");
-        } else {
-            // show input field
-            makeAGuess.setVisibility(View.VISIBLE);
-
-            // hide button to start new game
-            newGameButton.setVisibility(View.INVISIBLE);
-        }
+        word = prefs.getString("wordToGuess", null);
+        Log.d("save", "after deleting game: " + word);
     }
 
     void setupTimer() {
@@ -199,16 +206,16 @@ public class PlayGameActivity extends AppCompatActivity {
                 int seconds = (int) (millisUntilFinished / 1000);
                 game.setSecondsLeft(seconds);
 
-                // update UI
-                checkStatusAndUpdateUI();
+                // update GUI
+                updateGUI();
             }
 
             public void onFinish() {
                 // update game model
                 game.setSecondsLeft(0);
 
-                // update UI
-                checkStatusAndUpdateUI();
+                // update GUI
+                updateGUI();
             }
         };
     }
@@ -235,6 +242,7 @@ public class PlayGameActivity extends AppCompatActivity {
 
         setupTimer();
         timer.start();
+        updateGUI();
     }
 
     @Override
@@ -245,8 +253,10 @@ public class PlayGameActivity extends AppCompatActivity {
 
         timer.cancel();
 
-        // update saved game
-        saveStatus();
+        // save current game if it is active
+        if (game.getGameState() == game.ACTIVE) {
+            saveStatus();
+        }
     }
 
     @Override
@@ -277,7 +287,10 @@ public class PlayGameActivity extends AppCompatActivity {
         editor.apply();
 //        editor.commit();
 
-        Log.d("save", "saving game");
+        Log.d("save", "wordToGuess: " + game.getWordToGuess());
+        Log.d("save", "usedLetters: " + game.getUsedLetters());
+        Log.d("save", "hangRound: " + game.getHangRound());
+        Log.d("save", "secondsLeft: " + game.getSecondsLeft());
     }
 
     public void showStatus(View view) {

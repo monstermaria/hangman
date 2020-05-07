@@ -25,54 +25,69 @@ class HangmanModel {
         setUsedLetters(letters);
         hangRound = round;
         secondsLeft = seconds;
+
+        updateGameState();
     }
 
     int handleInput(CharSequence input) {
+        int result;
+
         if (input.length() == 1) {
-            return handleLetterInput(input);
+            result = handleLetterInput(input);
         } else if (input.length() == wordToGuess.length()) {
-            return handleWordInput(input);
+            result = handleWordInput(input);
         } else {
-            return R.string.wrong_number_of_letters;
+            result = R.string.wrong_number_of_letters;
         }
+
+        updateGameState();
+
+        return result;
     }
 
     private int handleLetterInput(CharSequence input) {
+        int result;
 
         char letter = input.charAt(0);
         if (Character.isLetter(letter)) {
             letter = Character.toLowerCase(letter);
             if (usedLetters.contains(letter)) {
-                return R.string.letter_already_used;
-            }
-
-            usedLetters.add(letter);
-            if (wordToGuess.contains(String.valueOf(letter))) {
-                return R.string.letter_in_word;
+                result = R.string.letter_already_used;
             } else {
-                // letter is not part of the word, one try spent
-                hangRound++;
-                return R.string.letter_not_in_word;
+                usedLetters.add(letter);
+                if (wordToGuess.contains(String.valueOf(letter))) {
+                    result = R.string.letter_in_word;
+                } else {
+                    // letter is not part of the word, one try spent
+                    hangRound++;
+                    result = R.string.letter_not_in_word;
+                }
             }
         } else {
-            return R.string.not_a_letter;
+            result = R.string.not_a_letter;
         }
+
+        return result;
     }
 
     private int handleWordInput(CharSequence input) {
+        int result;
+
         String word = input.toString().toLowerCase();
         if (word.equals(wordToGuess)) {
             // shortcut to win
             gameState = WON;
-            return R.string.letter_in_word;
+            result = R.string.letter_in_word;
         } else {
             // word is not correct, one try spent
             hangRound++;
-            return R.string.letter_not_in_word;
+            result = R.string.letter_not_in_word;
         }
+
+        return result;
     }
 
-    void updateGameState() {
+    private void updateGameState() {
         if (getShowWord().equals(wordToGuess)) {
             gameState = WON;
         }
@@ -84,7 +99,6 @@ class HangmanModel {
     // getters & setters
 
     int getGameState() {
-        updateGameState();
         return gameState;
     }
 
@@ -93,6 +107,10 @@ class HangmanModel {
     }
 
     String getShowWord() {
+        if (gameState == WON) {
+            return wordToGuess;
+        }
+
         StringBuilder showWord = new StringBuilder();
 
         for (int i = 0; i < wordToGuess.length(); i++) {

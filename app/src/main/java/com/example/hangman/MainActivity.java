@@ -41,11 +41,15 @@ public class MainActivity extends AppCompatActivity {
         // hide continue game if there is no saved game
         SharedPreferences prefs = getSharedPreferences("Hangman", MODE_PRIVATE);
         if (prefs == null) {
+            Log.d("main", "no preferences found");
             findViewById(R.id.continueGame).setVisibility(View.INVISIBLE);
         } else {
             String wordToGuess = prefs.getString("wordToGuess", null);
             if (wordToGuess == null) {
+                Log.d("main", "no wordToGuess found in preferences");
                 findViewById(R.id.continueGame).setVisibility(View.INVISIBLE);
+            } else {
+                Log.d("main", "wordToGuess found in preferences: " + wordToGuess);
             }
         }
     }
