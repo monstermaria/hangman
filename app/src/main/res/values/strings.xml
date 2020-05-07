@@ -18,4 +18,5 @@
     <string name="status_won">Congratulations, you won! You used %1$d of 10 tries.</string>
     <string name="status_lost">Sorry, you lost! Better luck next time!</string>
     <string name="used_letters">You have used these letters: %1$s</string>
+    <string name="timer_text">Seconds left: %1$d</string>
 </resources>

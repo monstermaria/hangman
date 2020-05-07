@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 public class StatusActivity extends AppCompatActivity {
@@ -28,6 +29,8 @@ public class StatusActivity extends AppCompatActivity {
         TextView hangmanView = findViewById(R.id.hangmanView);
         TextView usedLettersView = findViewById(R.id.usedLettersView);
         TextView showWordView = findViewById(R.id.showWordView);
+        TextView timeLeftView = findViewById(R.id.timeLeftView);
+
         Intent intent = getIntent();
 
         int hangRound = intent.getIntExtra("hangRound", 0);
@@ -38,6 +41,9 @@ public class StatusActivity extends AppCompatActivity {
 
         String showWord = intent.getStringExtra("showWord");
         showWordView.setText(showWord);
+
+        int seconds = intent.getIntExtra("secondsLeft", 0);
+        timeLeftView.setText(getString(R.string.timer_text, seconds));
     }
 
 
@@ -91,5 +97,12 @@ public class StatusActivity extends AppCompatActivity {
         super.onDestroy();
 
         Log.d("lifecycle", "onDestroy " + this);
+    }
+
+    public void okClicked(View view) {
+        Intent intent = new Intent();
+        intent.putExtra("message", "Result delivered from StatusActivity");
+        setResult(8, intent);
+        finish();
     }
 }

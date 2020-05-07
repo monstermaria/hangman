@@ -23,17 +23,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         Log.d("lifecycle", "onStart " + this);
-
-        // hide continue game if there is no saved game
-        SharedPreferences prefs = getSharedPreferences("Hangman", MODE_PRIVATE);
-        if (prefs == null) {
-            findViewById(R.id.continueGame).setVisibility(View.INVISIBLE);
-        } else {
-            String wordToGuess = prefs.getString("wordToGuess", null);
-            if (wordToGuess == null) {
-                findViewById(R.id.continueGame).setVisibility(View.INVISIBLE);
-            }
-        }
     }
 
     @Override
@@ -48,6 +37,17 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         Log.d("lifecycle", "onResume " + this);
+
+        // hide continue game if there is no saved game
+        SharedPreferences prefs = getSharedPreferences("Hangman", MODE_PRIVATE);
+        if (prefs == null) {
+            findViewById(R.id.continueGame).setVisibility(View.INVISIBLE);
+        } else {
+            String wordToGuess = prefs.getString("wordToGuess", null);
+            if (wordToGuess == null) {
+                findViewById(R.id.continueGame).setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     @Override

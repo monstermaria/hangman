@@ -23,7 +23,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
-            android:id="@+id/statusView"
+            android:id="@+id/triesView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -31,11 +31,26 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
+            android:id="@+id/timerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/timer_text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <TextView
+            android:id="@+id/infoView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <TextView
             android:id="@+id/showWordView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:textSize="24sp" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <EditText
             android:id="@+id/guessView"
@@ -46,7 +61,18 @@
             android:hint="@string/make_a_guess"
             android:imeOptions="actionGo"
             android:inputType="text"
-            android:autofillHints="" />
+            android:autofillHints=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <Button
+            android:id="@+id/startNewGameButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/button_rounded"
+            android:text="@string/start_game"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/showStatusButton"
@@ -55,7 +81,8 @@
             android:layout_margin="16dp"
             android:background="@drawable/button_rounded"
             android:onClick="showStatus"
-            android:text="@string/status_button" />
+            android:text="@string/status_button"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     </LinearLayout>
 </ScrollView>
