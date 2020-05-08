@@ -5,9 +5,21 @@ import java.util.ArrayList;
 
 class HangmanModel {
 
-    final int ACTIVE = 0;
-    final int WON = 1;
-    final int LOST = 2;
+    // game state
+    final static int ACTIVE = 0;
+    final static int WON = 1;
+    final static int LOST = 2;
+
+    // result codes
+    final static int WRONG_NUMBER_OF_LETTERS = 10;
+    final static int LETTER_ALREADY_USED = 11;
+    final static int LETTER_IN_WORD = 12;
+    final static int LETTER_NOT_IN_WORD = 13;
+    final static int NOT_A_LETTER = 14;
+    final static int WORD_CORRECT = 15;
+    final static int WORD_NOT_CORRECT = 16;
+
+
 
     private String wordToGuess;
     private ArrayList<Character> usedLetters = new ArrayList<>(30);
@@ -37,7 +49,7 @@ class HangmanModel {
         } else if (input.length() == wordToGuess.length()) {
             result = handleWordInput(input);
         } else {
-            result = R.string.wrong_number_of_letters;
+            result = WRONG_NUMBER_OF_LETTERS;
         }
 
         updateGameState();
@@ -52,19 +64,19 @@ class HangmanModel {
         if (Character.isLetter(letter)) {
             letter = Character.toLowerCase(letter);
             if (usedLetters.contains(letter)) {
-                result = R.string.letter_already_used;
+                result = LETTER_ALREADY_USED;
             } else {
                 usedLetters.add(letter);
                 if (wordToGuess.contains(String.valueOf(letter))) {
-                    result = R.string.letter_in_word;
+                    result = LETTER_IN_WORD;
                 } else {
                     // letter is not part of the word, one try spent
                     hangRound++;
-                    result = R.string.letter_not_in_word;
+                    result = LETTER_NOT_IN_WORD;
                 }
             }
         } else {
-            result = R.string.not_a_letter;
+            result = NOT_A_LETTER;
         }
 
         return result;
@@ -77,11 +89,11 @@ class HangmanModel {
         if (word.equals(wordToGuess)) {
             // shortcut to win
             gameState = WON;
-            result = R.string.letter_in_word;
+            result = WORD_CORRECT;
         } else {
             // word is not correct, one try spent
             hangRound++;
-            result = R.string.letter_not_in_word;
+            result = WORD_NOT_CORRECT;
         }
 
         return result;
