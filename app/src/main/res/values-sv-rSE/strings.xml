@@ -20,4 +20,7 @@
     <string name="status_lost">Tyvärr, du förlorade! Bättre lycka nästa gång!</string>
     <string name="used_letters">Du har använt dessa bokstäver: %1$s</string>
     <string name="timer_text">Sekunder kvar: %1$d</string>
+    <string name="word_correct">Du har rätt!</string>
+    <string name="word_not_correct">Du har fel!</string>
+    <string name="error">Något gick fel, försök igen</string>
 </resources>

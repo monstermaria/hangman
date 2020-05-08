@@ -19,4 +19,7 @@
     <string name="status_lost">Sorry, you lost! Better luck next time!</string>
     <string name="used_letters">You have used these letters: %1$s</string>
     <string name="timer_text">Seconds left: %1$d</string>
+    <string name="word_correct">You are right!</string>
+    <string name="word_not_correct">You are wrong!</string>
+    <string name="error">Something went wrong, try again</string>
 </resources>

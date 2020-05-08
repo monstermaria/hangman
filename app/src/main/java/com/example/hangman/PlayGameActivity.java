@@ -141,7 +141,34 @@ public class PlayGameActivity extends AppCompatActivity {
     void handleInput(CharSequence input) {
 
         if (input.length() > 0) {
-            int message = game.handleInput(input);
+            int result = game.handleInput(input);
+            int message;
+            switch (result) {
+                case HangmanModel.LETTER_ALREADY_USED:
+                    message = R.string.letter_already_used;
+                    break;
+                case HangmanModel.LETTER_IN_WORD:
+                    message = R.string.letter_in_word;
+                    break;
+                case HangmanModel.LETTER_NOT_IN_WORD:
+                    message = R.string.letter_not_in_word;
+                    break;
+                case HangmanModel.NOT_A_LETTER:
+                    message = R.string.not_a_letter;
+                    break;
+                case HangmanModel.WORD_CORRECT:
+                    message = R.string.word_correct;
+                    break;
+                case HangmanModel.WORD_NOT_CORRECT:
+                    message = R.string.word_not_correct;
+                    break;
+                case HangmanModel.WRONG_NUMBER_OF_LETTERS:
+                    message = R.string.wrong_number_of_letters;
+                    break;
+                default:
+                    message = R.string.error;
+                    break;
+            }
             infoView.setText(message);
             updateGUI();
         }
@@ -154,17 +181,17 @@ public class PlayGameActivity extends AppCompatActivity {
         // update timer view
         timerView.setText(getString(R.string.timer_text, game.getSecondsLeft()));
 
-        if (game.getGameState() != game.ACTIVE) {
+        if (game.getGameState() != HangmanModel.ACTIVE) {
             endGame();
         }
     }
 
     void endGame() {
-        if (game.getGameState() == game.WON) {
+        if (game.getGameState() == HangmanModel.WON) {
             infoView.setText(getString(R.string.status_won, game.getHangRound()));
         }
 
-        if (game.getGameState() == game.LOST) {
+        if (game.getGameState() == HangmanModel.LOST) {
             infoView.setText(getString(R.string.status_lost));
         }
 
@@ -263,7 +290,7 @@ public class PlayGameActivity extends AppCompatActivity {
         timer.cancel();
 
         // save current game if it is active
-        if (game.getGameState() == game.ACTIVE) {
+        if (game.getGameState() == HangmanModel.ACTIVE) {
             saveStatus();
         }
     }
