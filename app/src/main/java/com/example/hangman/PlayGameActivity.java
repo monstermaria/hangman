@@ -156,7 +156,7 @@ public class PlayGameActivity extends AppCompatActivity {
                 case HangmanModel.NOT_A_LETTER:
                     message = R.string.not_a_letter;
                     break;
-                case HangmanModel.WORD_CORRECT:
+                case HangmanModel.WORD_CORRECT: // will be overwritten by game won
                     message = R.string.word_correct;
                     break;
                 case HangmanModel.WORD_NOT_CORRECT:
@@ -169,7 +169,8 @@ public class PlayGameActivity extends AppCompatActivity {
                     message = R.string.error;
                     break;
             }
-            infoView.setText(message);
+            String text = getString(message, input);
+            infoView.setText(text);
             updateGUI();
         }
     }
@@ -200,6 +201,8 @@ public class PlayGameActivity extends AppCompatActivity {
 
         // hide input field so the player can't continue to make guesses
         makeAGuess.setVisibility(View.INVISIBLE);
+        // empty input field in preparation of new game
+        makeAGuess.setText("");
 
         // show button to start new game
         newGameButton.setVisibility(View.VISIBLE);

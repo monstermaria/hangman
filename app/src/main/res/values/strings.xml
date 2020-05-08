@@ -6,20 +6,20 @@
     <string name="guess_the_word">Guess the word</string>
     <string name="instructions">Enter a letter at a time, or guess the whole word. The word has %1$d letters. Good luck!</string>
     <string name="too_many_letters">One letter at a time, please!</string>
-    <string name="not_a_letter">Only letters, please!</string>
-    <string name="letter_already_used">You have already used that letter</string>
-    <string name="letter_in_word">You are right!</string>
-    <string name="letter_not_in_word">You are wrong!</string>
+    <string name="not_a_letter">Only letters, please! %1$s is not a letter</string>
+    <string name="letter_already_used">You have already used the letter %1$s</string>
+    <string name="letter_in_word">You are right! %1$s is part of the word</string>
+    <string name="letter_not_in_word">You are wrong! %1$s in not part of the word</string>
     <string name="status_button">Show status</string>
     <string name="continue_game">Continue saved game</string>
     <string name="make_a_guess">Make a guess</string>
-    <string name="wrong_number_of_letters">The word you guessed contain the wrong number of letters.</string>
+    <string name="wrong_number_of_letters">The word you guessed, %1$s, contain the wrong number of letters.</string>
     <string name="status">You have used %1$d of 10 tries.</string>
     <string name="status_won">Congratulations, you won! You used %1$d of 10 tries.</string>
     <string name="status_lost">Sorry, you lost! Better luck next time!</string>
     <string name="used_letters">You have used these letters: %1$s</string>
     <string name="timer_text">Seconds left: %1$d</string>
-    <string name="word_correct">You are right!</string>
-    <string name="word_not_correct">You are wrong!</string>
+    <string name="word_correct">You are right! The word is %1$s</string>
+    <string name="word_not_correct">You are wrong! The word is not %1$s</string>
     <string name="error">Something went wrong, try again</string>
 </resources>

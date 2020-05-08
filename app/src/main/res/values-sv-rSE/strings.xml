@@ -7,20 +7,20 @@
     <string name="guess_the_word">Gissa ordet</string>
     <string name="instructions">Mata in en bokstav i taget, eller gissa hela ordet. Ordet har %1$d bokstäver.  Lycka till!</string>
     <string name="too_many_letters">En bokstav i taget, tack!</string>
-    <string name="not_a_letter">Bara bokstäver, tack!</string>
-    <string name="letter_already_used">Du har redan använt den bokstaven</string>
-    <string name="letter_in_word">Du har rätt!</string>
-    <string name="letter_not_in_word">Du har fel!</string>
+    <string name="not_a_letter">Bara bokstäver, tack! %1$s är inte en bokstav</string>
+    <string name="letter_already_used">Du har redan använt bokstaven %1$s</string>
+    <string name="letter_in_word">Du har rätt! %1$s ingår i ordet</string>
+    <string name="letter_not_in_word">Du har fel! %1$s är inte del av ordet</string>
     <string name="status_button">Visa status</string>
     <string name="continue_game">Fortsätt sparat spel</string>
     <string name="make_a_guess">Gör en gissning</string>
-    <string name="wrong_number_of_letters">Ordet du gissade innehåller fel antal bokstäver.</string>
+    <string name="wrong_number_of_letters">Ordet du gissade, %1$s, innehåller fel antal bokstäver.</string>
     <string name="status">Du har använt %1$d av 10 försök.</string>
     <string name="status_won">Gratulerar, du vann! Du använde %1$d av 10 försök.</string>
     <string name="status_lost">Tyvärr, du förlorade! Bättre lycka nästa gång!</string>
     <string name="used_letters">Du har använt dessa bokstäver: %1$s</string>
     <string name="timer_text">Sekunder kvar: %1$d</string>
-    <string name="word_correct">Du har rätt!</string>
-    <string name="word_not_correct">Du har fel!</string>
+    <string name="word_correct">Du har rätt! Ordet är %1$s</string>
+    <string name="word_not_correct">Du har fel! Ordet är inte %1$s</string>
     <string name="error">Något gick fel, försök igen</string>
 </resources>
