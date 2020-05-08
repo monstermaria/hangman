@@ -3,6 +3,7 @@ package com.example.hangman;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -174,7 +176,13 @@ public class PlayGameActivity extends AppCompatActivity {
         // show button to start new game
         newGameButton.setVisibility(View.VISIBLE);
 
-        // TODO: hide softkey
+        // hide soft keyboard
+        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(
+                Activity.INPUT_METHOD_SERVICE
+        );
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(makeAGuess.getWindowToken(), 0);
+        }
 
         // remove saved game
         deleteSavedGame();
