@@ -48,7 +48,7 @@ public class PlayGameActivity extends AppCompatActivity {
         Random random = new Random();
         String word = words[random.nextInt(words.length)];
 
-        // TODO: handle all entries better
+        // determine if a new game should be started, or a saved game loaded
         if (gameSetup != null && gameSetup.equals("new")) {
             // start new game
             game = new HangmanModel(word);
@@ -58,6 +58,7 @@ public class PlayGameActivity extends AppCompatActivity {
             // the status activity, and that means there is a game to load
             SharedPreferences prefs = getSharedPreferences("Hangman", MODE_PRIVATE);
             boolean gameLoaded = loadGame(prefs);
+            // start new game if a saved game couldn't be loaded
             if (!gameLoaded) {
                 game = new HangmanModel(word);
             }
